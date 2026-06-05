@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dual-Approach Hybrid Intrusion Detection System</title>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- =====================================================
+ HEADER
+===================================================== -->
+<header class="header">
+    <div class="header-inner">
+        <div>
+            <h1>Dual-Approach Hybrid Intrusion Detection System</h1>
+            <p class="sub">Signature-Based + Anomaly-Based Detection • Academic Demonstration</p>
+        </div>
+        <div class="header-actions">
+            <button id="runAnalysisBtn" class="btn primary">Run Analysis</button>
+            <button id="refreshBtn" class="btn">Refresh</button>
+        </div>
+    </div>
+</header>
+
+<!-- =====================================================
+ MAIN DASHBOARD GRID
+===================================================== -->
+<main class="dashboard">
+
+    <div class="controls">
+        <label class="toggle"><input id="toggleSignature" type="checkbox" checked> Signature IDS</label>
+        <label class="toggle"><input id="toggleAnomaly" type="checkbox" checked> Anomaly IDS</label>
+        <label class="toggle"><input id="toggleAlerts" type="checkbox" checked> Alerts Panel</label>
+    </div>
+
+
+    <!-- ===============================
+     SYSTEM OVERVIEW
+    ================================ -->
+    <section class="card overview">
+        <h2>System Overview</h2>
+
+        <div class="metrics">
+            <div class="metric">
+                <h3>Total Network Records</h3>
+                <p id="totalRecords">–</p>
+            </div>
+            <div class="metric">
+                <h3>Normal Traffic</h3>
+                <p id="normalCount">–</p>
+            </div>
+            <div class="metric">
+                <h3>Attack Traffic</h3>
+                <p id="attackCount">–</p>
+            </div>
+        </div>
+        
+        <div class="model-metrics">
+            <table class="metrics-table">
+                <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+                <tbody>
+                    <tr><td>Precision</td><td id="precision">-</td></tr>
+                    <tr><td>Recall</td><td id="recall">-</td></tr>
+                    <tr><td>F1 Score</td><td id="f1">-</td></tr>
+                    <tr><td>ROC AUC</td><td id="rocauc">-</td></tr>
+                </tbody>
+            </table>
+    
+            <div class="feature-importance">
+                <h4>Top Feature Importances</h4>
+                <ul id="featureList" class="feature-list"></ul>
+            </div>
+        </div>
+
+        <div class="technical-panels">
+            <div class="confusion-matrix card-small">
+                <h4>Confusion Matrix</h4>
+                <table class="confusion-table">
+                    <thead><tr><th></th><th>Predicted Attack</th><th>Predicted Normal</th></tr></thead>
+                    <tbody>
+                        <tr><th>Actual Attack</th><td id="cm-TP">-</td><td id="cm-FN">-</td></tr>
+                        <tr><th>Actual Normal</th><td id="cm-FP">-</td><td id="cm-TN">-</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="roc-panel card-small">
+                <h4>ROC Curve</h4>
+                <div class="chart-container"><canvas id="rocChart"></canvas></div>
+            </div>
+
+            <div class="training-meta card-small">
+                <h4>Model Training Metadata</h4>
+                <ul class="meta-list">
+                    <li>Algorithm: <strong id="meta-algo">Random Forest</strong></li>
+                    <li>Training Date: <strong id="meta-date">-</strong></li>
+                    <li>Train Samples: <strong id="meta-samples">-</strong></li>
+                    <li>Hyperparameters: <pre id="meta-params">-</pre></li>
+                </ul>
+                <button id="downloadMeta" class="btn">Download Metadata</button>
+            </div>
+        </div>
+
+        <p class="note">
+            This section provides a high-level summary of the dataset processed by the Hybrid IDS.
+        </p>
+    </section>
+
+    <!-- ===============================
+     SIGNATURE-BASED IDS
+    ================================ -->
+    <section id="signatureSection" class="card">
+        <div class="card-header"><h2>Signature-Based Intrusion Detection</h2></div>
+
+        <p class="description">
+            The signature-based IDS detects known attack patterns using predefined rules derived
+            from historical intrusion signatures.
+        </p>
+
+        <div class="chart-container">
+            <canvas id="signatureChart"></canvas>
+        </div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Attack Type</th>
+                    <th>Detected Count</th>
+                </tr>
+            </thead>
+            <tbody id="signatureTableBody">
+                <!-- Filled dynamically -->
+            </tbody>
+        </table>
+    </section>
+
+    <!-- ===============================
+     ANOMALY-BASED IDS
+    ================================ -->
+    <section id="anomalySection" class="card">
+        <div class="card-header"><h2>Anomaly-Based Intrusion Detection (ML)</h2></div>
+
+        <p class="description">
+            The anomaly-based IDS employs a Random Forest classifier to identify deviations from
+            learned normal traffic behavior, enabling detection of unknown or zero-day attacks.
+        </p>
+
+        <div class="chart-container">
+            <canvas id="anomalyChart"></canvas>
+        </div>
+
+        <p class="note">
+            The bar graph illustrates classification results produced by the trained machine learning model.
+        </p>
+    </section>
+
+    <!-- ===============================
+     HYBRID DECISION ENGINE
+    ================================ -->
+    <section class="card decision-card">
+        <h2>Hybrid IDS Final Decision</h2>
+
+        <p class="description">
+            The hybrid decision engine combines outputs from both detection approaches.
+            If an intrusion is detected by either mechanism, the traffic is classified as malicious.
+        </p>
+
+        <div id="finalDecision" class="decision-box">
+            Waiting for analysis...
+        </div>
+    </section>
+
+    <aside id="alertsPanel" class="card alerts">
+        <h2>Recent Alerts</h2>
+        <ul id="alertsList" class="alerts-list">
+            <!-- populated dynamically -->
+        </ul>
+    </aside>
+
+</main>
+
+<!-- =====================================================
+ FOOTER
+===================================================== -->
+<footer class="footer">
+    <p>
+        Hybrid IDS Dashboard | Signature-Based + Anomaly-Based Detection  
+        <br>
+        Academic Demonstration Interface
+    </p>
+</footer>
+
+<!-- =====================================================
+ JAVASCRIPT
+===================================================== -->
+<script src="script.js"></script>
+
+</body>
+</html>
