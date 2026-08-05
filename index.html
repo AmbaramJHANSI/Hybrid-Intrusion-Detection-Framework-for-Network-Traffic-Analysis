@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Professional Dual-Approach IDS Dashboard for real-time network threat monitoring and intrusion detection.">
+    <meta name="theme-color" content="#1a1f3a">
+    <title>Hybrid-Approach IDS | Real-Time Threat Detection</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" integrity="sha512-9usAa3IW2lEnf3lGY6i7IYms4P7from8zcrYaF8Qj6K+H5bAQM9ke+kNB8I1collapsed" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" role="complementary" aria-label="Dashboard Navigation">
+            <div class="sidebar-header">
+                <div class="logo" role="img" aria-label="Dual IDS Logo">
+                    <i class="fas fa-shield-alt" aria-hidden="true"></i>
+                    <h1>Dual IDS</h1>
+                </div>
+            </div>
+            
+            <nav class="nav-menu" role="navigation" aria-label="Main Navigation">
+                <ul class="nav-list">
+                    <li>
+                        <a href="#overview" class="nav-item active" data-tab="overview">
+                            <i class="fas fa-chart-dashboard" aria-hidden="true"></i>
+                            <span>Overview</span>
+                        </a>
+                    </li>
+                    <li>
+                        <!-- Traffic Analysis removed -->
+                    </li>
+                    <li>
+                        <a href="#alerts" class="nav-item" data-tab="alerts">
+                            <i class="fas fa-bell" aria-hidden="true"></i>
+                            <span>Alerts</span>
+                            <span class="alert-badge" id="alertCount" aria-label="Number of alerts">12</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#signatures" class="nav-item" data-tab="signatures">
+                            <i class="fas fa-fingerprint" aria-hidden="true"></i>
+                            <span>Signatures</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#anomaly" class="nav-item" data-tab="anomaly">
+                            <i class="fas fa-brain" aria-hidden="true"></i>
+                            <span>Anomaly Detection</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#settings" class="nav-item" data-tab="settings">
+                            <i class="fas fa-cog" aria-hidden="true"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <footer class="sidebar-footer">
+                <div class="system-status" role="status" aria-live="polite">
+                    <div class="status-indicator online">
+                        <div class="status-dot"></div>
+                        <span>System Online</span>
+                    </div>
+                    <div class="last-update" id="lastUpdate">Last update: Just now</div>
+                </div>
+            </footer>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <h1>Intrusion Detection System Dashboard</h1>
+                    <p>Real-time monitoring of network threats</p>
+                </div>
+                <div class="header-right">
+                    <div class="time-display" id="currentTime"></div>
+                    <button class="btn btn-primary" id="simulateAttack">
+                        <i class="fas fa-bolt"></i>
+                        Simulate Attack
+                    </button>
+                </div>
+            </header>
+
+            <!-- Overview Tab -->
+            <div class="tab-content active" id="overview" role="tabpanel" aria-labelledby="overviewTab">
+                <!-- Stats Cards -->
+                <section class="stats-grid" aria-label="Dashboard Statistics">
+                    <article class="stat-card stat-threat" role="region" aria-label="Total Threats Statistics">
+                        <div class="stat-icon threat" aria-hidden="true">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalThreats" aria-live="polite">24</h3>
+                            <p>Total Threats</p>
+                        </div>
+                        <div class="stat-trend up" aria-label="Increased by 12 percent">+12%</div>
+                    </article>
+                    
+                    <article class="stat-card stat-signature" role="region" aria-label="Signature Alerts Statistics">
+                        <div class="stat-icon signature" aria-hidden="true">
+                            <i class="fas fa-fingerprint"></i>
+                        </div> 
+                        <div class="stat-info">
+                            <h3 id="signatureAlerts" aria-live="polite">18</h3>
+                            <p>Signature Alerts</p>
+                        </div>
+                        <div class="stat-trend up" aria-label="Increased by 8 percent">+8%</div>
+                    </article>
+                    
+                    <article class="stat-card stat-anomaly" role="region" aria-label="Anomaly Alerts Statistics">
+                        <div class="stat-icon anomaly" aria-hidden="true">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="anomalyAlerts" aria-live="polite">6</h3>
+                            <p>Anomaly Alerts</p>
+                        </div>
+                        <div class="stat-trend up" aria-label="Increased by 25 percent">+25%</div>
+                    </article>
+                    
+                    <article class="stat-card stat-traffic" role="region" aria-label="Packets Processed Statistics">
+                        <div class="stat-icon traffic" aria-hidden="true">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="packetsProcessed" aria-live="polite">2.4M</h3>
+                            <p>Packets Processed</p>
+                        </div>
+                        <div class="stat-trend down" aria-label="Decreased by 3 percent">-3%</div>
+                    </article>
+                </section>
+
+                <!-- Top Alerting IPs -->
+                <section class="top-ips-panel" aria-label="Top alerting IP addresses">
+                    <h3>Top Alerting IPs</h3>
+                    <ul id="topIPsList" class="top-ips-list">
+                        <!-- populated by JS -->
+                    </ul>
+                </section>
+
+                <!-- Charts Row -->
+                <section class="charts-row" aria-label="Analytics Charts">
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h3>Threat Distribution</h3>
+                            <select id="threatTimeRange" aria-label="Time range for threat distribution">
+                                <option value="1h">Last 1 Hour</option>
+                                <option value="6h">Last 6 Hours</option>
+                                <option value="24h">Last 24 Hours</option>
+                            </select>
+                        </div>
+                        <div class="chart-stats">
+                            <div class="chart-stat">Top Threat: <strong id="threatTopType">—</strong></div>
+                            <div class="chart-stat">Signature Hits: <strong id="threatSignatureCount">0</strong></div>
+                            <div class="chart-stat">Anomaly Hits: <strong id="threatAnomalyCount">0</strong></div>
+                        </div>
+                        <canvas id="threatChart" role="img" aria-label="Threat distribution chart"></canvas>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h3>Detection Methods Performance</h3>
+                        </div>
+                        <div class="chart-stats">
+                            <div class="chart-stat">Signature Accuracy: <strong id="sigAccuracy">0%</strong></div>
+                            <div class="chart-stat">Anomaly Accuracy: <strong id="anomAccuracy">0%</strong></div>
+                            <div class="chart-stat">False Positives: <strong id="falsePositives">0</strong></div>
+                        </div>
+                        <canvas id="performanceChart" role="img" aria-label="Detection methods performance chart"></canvas>
+                    </div>
+                </section>
+
+                <!-- Recent Alerts & Traffic Flow -->
+                <div class="bottom-row">
+                    <section class="recent-alerts" aria-label="Recent Security Alerts">
+                        <div class="section-header">
+                            <h3>Recent Alerts</h3>
+                            <a href="#alerts" class="view-all" role="button">View All</a>
+                        </div>
+                        <div class="alerts-list" id="recentAlertsList" role="list">
+                            <!-- Alerts will be populated by JavaScript -->
+                        </div>
+                    </section>
+                    
+                    <section class="traffic-flow" aria-label="Live Traffic Flow Visualization">
+                        <div class="section-header">
+                            <h3>Live Traffic Flow</h3>
+                            <div class="traffic-stats" role="group" aria-label="Traffic classification percentages">
+                                <span class="traffic-stat normal"><span aria-label="Normal traffic percentage">Normal: <span id="normalTraffic">85%</span></span></span>
+                                <span class="traffic-stat suspicious"><span aria-label="Suspicious traffic percentage">Suspicious: <span id="suspiciousTraffic">12%</span></span></span>
+                                <span class="traffic-stat malicious"><span aria-label="Malicious traffic percentage">Malicious: <span id="maliciousTraffic">3%</span></span></span>
+                            </div>
+                        </div>
+                        <div class="traffic-visualization">
+                            <div class="packet-flow" id="packetFlow" role="img" aria-label="Animated network packet flow visualization">
+                                <!-- Animated packets will be added here -->
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- Other tabs would go here with similar structure -->
+            <div class="tab-content" id="alerts" role="tabpanel" aria-labelledby="alertsTab">
+                <!-- Alerts tab content -->
+                <div class="tab-header">
+                    <h2>Security Alerts</h2>
+                    <div class="filter-controls">
+                        <label for="alertSeverityFilter" class="sr-only">Filter by severity level</label>
+                        <select id="alertSeverityFilter" aria-label="Filter alerts by severity">
+                            <option value="all">All Severities</option>
+                            <option value="critical">Critical</option>
+                            <option value="high">High</option>
+                            <option value="medium">Medium</option>
+                            <option value="low">Low</option>
+                        </select>
+                        <label for="alertTypeFilter" class="sr-only">Filter by alert type</label>
+                        <select id="alertTypeFilter" aria-label="Filter alerts by type">
+                            <option value="all">All Types</option>
+                            <option value="signature">Signature</option>
+                            <option value="anomaly">Anomaly</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="alerts-table-container">
+                    <table class="alerts-table" id="alertsTable" role="grid">
+                        <thead>
+                            <tr>
+                                <th scope="col">Time</th>
+                                <th scope="col">Severity</th>
+                                <th scope="col">Source IP</th>
+                                <th scope="col">Destination IP</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Detection Method</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="alertsTableBody">
+                            <!-- Alerts will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Traffic Analysis tab removed per user request -->
+
+            <!-- Signatures Tab -->
+            <div class="tab-content" id="signatures" role="tabpanel" aria-labelledby="signaturesTab">
+                <div class="tab-header">
+                    <h2>Signatures</h2>
+                </div>
+                <div class="signatures-container">
+                    <div class="signatures-summary">
+                        <div class="summary-item">Total Signatures: <strong id="totalSignatures">0</strong></div>
+                        <div class="summary-item">Active: <strong id="activeSignatures">0</strong></div>
+                        <div class="summary-item">Matched Alerts: <strong id="matchedSignaturesCount">0</strong></div>
+                    </div>
+                    <table class="signatures-table" id="signaturesTable">
+                        <thead>
+                            <tr>
+                                <th>Signature</th>
+                                <th>Matches</th>
+                                <th>Severity</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="signaturesTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Anomaly Detection Tab -->
+            <div class="tab-content" id="anomaly" role="tabpanel" aria-labelledby="anomalyTab">
+                <div class="tab-header">
+                    <div>
+                        <h2>Anomaly Detection</h2>
+                        <p class="anomaly-desc">Monitor unusual behavior detected by the anomaly engine. Generate sample anomalies for testing and investigation.</p>
+                    </div>
+                    <div class="anomaly-controls">
+                        <div class="anomaly-stats">Anomalies: <span id="anomalyCount">0</span></div>
+                        <button id="addAnomaliesBtn" class="btn btn-primary">Add Sample Anomalies</button>
+                    </div>
+                </div>
+                <div class="anomaly-list" id="anomalyList">
+                    <!-- populated by JS -->
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div class="tab-content" id="settings" role="tabpanel" aria-labelledby="settingsTab">
+                <div class="tab-header">
+                    <h2>Settings</h2>
+                </div>
+                <div class="settings-panel">
+                    <label><input type="checkbox" id="autoRefreshToggle" checked> Auto-refresh dashboard</label>
+                    <div>
+                        <label for="refreshInterval">Refresh interval (seconds): </label>
+                        <input type="number" id="refreshInterval" value="10" min="1" max="3600">
+                    </div>
+                    <div>
+                        <button id="exportAlertsBtn" class="btn">Export Alerts</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Modal -->
+    <div class="modal" id="alertModal" role="dialog" aria-labelledby="alertModalTitle" aria-modal="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="alertModalTitle">New Security Alert</h3>
+                <button class="close-modal" aria-label="Close alert modal">&times;</button>
+            </div>
+            <div class="modal-body" id="modalAlertContent">
+                <!-- Alert details will be inserted here -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="ignoreAlert">Ignore</button>
+                <button class="btn btn-primary" id="investigateAlert">Investigate</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Signature Details Modal -->
+    <div class="modal" id="signatureModal" role="dialog" aria-labelledby="signatureModalTitle" aria-modal="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="signatureModalTitle">Signature Details</h3>
+                <button class="close-modal" id="closeSignatureModal" aria-label="Close signature modal">&times;</button>
+            </div>
+            <div class="modal-body" id="modalSignatureContent">
+                <!-- Signature details will be populated by JS -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn" id="signatureCopyBtn">Copy Pattern</button>
+                <button class="btn" id="signatureToggleBtn">Toggle</button>
+                <button class="btn btn-secondary" id="signatureCloseBtn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

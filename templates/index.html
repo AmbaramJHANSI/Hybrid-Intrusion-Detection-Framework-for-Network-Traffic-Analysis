@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hybrid Intrusion Detection System Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg fixed-top navbar-dark">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="#">Hybrid IDS</a>
+
+    <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="#overview">Overview</a></li>
+        <li class="nav-item"><a class="nav-link" href="#dataset">Dataset</a></li>
+        <li class="nav-item"><a class="nav-link" href="#threat">Threats</a></li>
+        <li class="nav-item"><a class="nav-link" href="#ml">ML Analysis</a></li>
+        <li class="nav-item"><a class="nav-link" href="#performance">Performance</a></li>
+        <li class="nav-item"><a class="nav-link" href="#insights">Insights</a></li>
+        <li class="nav-item"><a class="nav-link" href="#api">API</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<header id="overview" class="hero py-5 mt-5">
+<div class="container text-center">
+<h1 class="display-4 fw-bold">Hybrid Intrusion Detection System</h1>
+<p class="lead">Signature-Based + Machine Learning Threat Analysis Dashboard</p>
+
+<div class="d-flex flex-wrap justify-content-center gap-3 mt-4">
+<span class="badge rounded-pill bg-success">● Online</span>
+<span class="badge rounded-pill bg-primary" id="modelBadge">Random Forest</span>
+<span class="badge rounded-pill bg-secondary" id="datasetBadge">NSL-KDD</span>
+<span class="badge rounded-pill bg-info text-dark" id="apiVersion">API v2.0</span>
+</div>
+</div>
+</header>
+
+<section class="container my-5">
+
+<div class="row g-4">
+
+<div class="col-lg-3 col-md-6">
+<div class="dashboard-card kpi-card">
+<h6><i class="bi bi-shield-check"></i> Accuracy</h6>
+<h2 id="accuracy">--</h2>
+<p>Model Performance</p>
+</div>
+</div>
+
+<div class="col-lg-3 col-md-6">
+<div class="dashboard-card kpi-card">
+<h6><i class="bi bi-exclamation-triangle"></i> Threat Level</h6>
+<h2 id="riskLevel">--</h2>
+<p>Current Risk</p>
+</div>
+</div>
+
+<div class="col-lg-3 col-md-6">
+<div class="dashboard-card kpi-card">
+<h6><i class="bi bi-bug"></i> Attacks</h6>
+<h2 id="attackCount">--</h2>
+<p>Detected Signatures</p>
+</div>
+</div>
+
+<div class="col-lg-3 col-md-6">
+<div class="dashboard-card kpi-card">
+<h6><i class="bi bi-lightning-charge"></i> Execution</h6>
+<h2 id="executionTime">--</h2>
+<p>Total Runtime</p>
+</div>
+</div>
+
+</div>
+</section>
+
+<section id="dataset" class="container my-5">
+<div class="row g-4">
+
+<div class="col-lg-6">
+<div class="dashboard-card">
+<h3><i class="bi bi-database"></i> Dataset Overview</h3>
+<table class="table table-borderless">
+<tbody>
+<tr><td>Dataset</td><td id="datasetName">--</td></tr>
+<tr><td>Samples</td><td id="samples">--</td></tr>
+<tr><td>Features</td><td id="features">--</td></tr>
+<tr><td>Training</td><td id="training">--</td></tr>
+<tr><td>Testing</td><td id="testing">--</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div class="col-lg-6">
+<div class="dashboard-card">
+<h3><i class="bi bi-diagram-3"></i> Detection Pipeline</h3>
+<ol class="pipeline">
+<li>Load NSL-KDD Dataset</li>
+<li>Data Cleaning</li>
+<li>Feature Encoding</li>
+<li>Train/Test Split</li>
+<li>Signature Detection</li>
+<li>Random Forest Analysis</li>
+<li>Threat Report Generation</li>
+</ol>
+</div>
+</div>
+
+</div>
+</section>
+
+<section id="threat" class="container my-5">
+<div class="row g-4">
+<div class="col-lg-7">
+<div class="dashboard-card">
+<h3>Attack Distribution</h3>
+<canvas id="attackChart"></canvas>
+</div>
+</div>
+
+<div class="col-lg-5">
+<div class="dashboard-card">
+<h3>Threat Summary</h3>
+
+<ul class="list-group list-group-flush">
+<li class="list-group-item">Risk Level <span id="summaryRisk" class="float-end">--</span></li>
+<li class="list-group-item">Attack Percentage <span id="attackPercent" class="float-end">--</span></li>
+<li class="list-group-item">Most Frequent <span id="topAttack" class="float-end">--</span></li>
+<li class="list-group-item">Rules Triggered <span id="rulesTriggered" class="float-end">--</span></li>
+</ul>
+
+</div>
+</div>
+</div>
+</section>
+
+<section id="ml" class="container my-5">
+<div class="row g-4">
+
+<div class="col-lg-7">
+<div class="dashboard-card">
+<h3>Feature Importance</h3>
+<canvas id="featureChart"></canvas>
+</div>
+</div>
+
+<div class="col-lg-5">
+<div class="dashboard-card">
+<h3>Confusion Matrix</h3>
+
+<table class="table text-center">
+<thead>
+<tr>
+<th></th>
+<th>Predicted Normal</th>
+<th>Predicted Attack</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<th>Actual Normal</th>
+<td id="tn">--</td>
+<td id="fp">--</td>
+</tr>
+
+<tr>
+<th>Actual Attack</th>
+<td id="fn">--</td>
+<td id="tp">--</td>
+</tr>
+</tbody>
+
+</table>
+
+</div>
+</div>
+
+</div>
+
+<div class="row mt-4">
+<div class="col-12">
+<div class="dashboard-card">
+<h3>Classification Report</h3>
+
+<table class="table table-hover" id="classificationTable">
+<thead>
+<tr>
+<th>Class</th>
+<th>Precision</th>
+<th>Recall</th>
+<th>F1</th>
+<th>Support</th>
+</tr>
+</thead>
+
+<tbody>
+
+</tbody>
+
+</table>
+
+</div>
+</div>
+</div>
+
+</section>
+
+<section id="performance" class="container my-5">
+<div class="dashboard-card">
+<h3>Performance Analysis</h3>
+<canvas id="performanceChart"></canvas>
+</div>
+</section>
+
+<section id="insights" class="container my-5">
+<div class="dashboard-card">
+<h3><i class="bi bi-lightbulb"></i> AI Insights</h3>
+
+<div id="insightList">
+<p>Insights will be generated after loading API data.</p>
+</div>
+
+</div>
+</section>
+
+<section id="api" class="container my-5">
+
+<div class="accordion" id="apiAccordion">
+
+<div class="accordion-item">
+
+<h2 class="accordion-header">
+
+<button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#apiCollapse">
+View Raw API Response
+</button>
+
+</h2>
+
+<div id="apiCollapse" class="accordion-collapse collapse">
+
+<div class="accordion-body">
+
+<pre id="apiResponse">{}</pre>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<footer class="py-5 text-center">
+<div class="container">
+<h5>Hybrid Intrusion Detection System</h5>
+<p>Department of Computer Science & Engineering (Cyber Security)</p>
+<p>Python • Flask • Bootstrap • Chart.js • Scikit-learn • NSL-KDD</p>
+</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+
+</body>
+</html>
