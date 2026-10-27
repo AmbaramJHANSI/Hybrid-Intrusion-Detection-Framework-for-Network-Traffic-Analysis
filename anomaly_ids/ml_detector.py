@@ -15,6 +15,9 @@ from sklearn.metrics import (
     confusion_matrix,
 )
 
+CLASS_LABELS = ("normal", "attack")
+CLASS_NAMES = ("Normal Traffic", "Attack Traffic")
+
 
 def train_logistic_regression(X_train, y_train):
     model = LogisticRegression(max_iter=1000)
@@ -41,7 +44,6 @@ def evaluate_model(
     testing_samples=None
 ):
     preds = model.predict(X_test)
-    probabilities = model.predict_proba(X_test)
 
     top_features = []
 
@@ -51,18 +53,40 @@ def evaluate_model(
         top_features = [
             {
                 "feature": feature,
-                "importance": round(float(score), 4)
+                "importance": float(score),
+                "importance_percent": float(score) * 100
             }
             for feature, score in feature_scores[:10]
         ]
 
-    cm = confusion_matrix(y_test, preds)
+    unexpected_labels = (set(y_test) | set(preds)) - set(CLASS_LABELS)
+    if unexpected_labels:
+        raise ValueError(
+            "Expected normalized class labels 'normal' and 'attack'; "
+            f"received unexpected labels: {sorted(unexpected_labels)}"
+        )
+
+    cm = confusion_matrix(y_test, preds, labels=CLASS_LABELS)
     tn, fp, fn, tp = cm.ravel()
+    report = classification_report(
+        y_test,
+        preds,
+        labels=CLASS_LABELS,
+        target_names=CLASS_NAMES,
+        output_dict=True,
+        zero_division=0
+    )
 
     print(f"\n=== {model_name} Evaluation ===")
     print("Accuracy:", accuracy_score(y_test, preds))
     print("\nClassification Report:")
-    print(classification_report(y_test, preds))
+    print(classification_report(
+        y_test,
+        preds,
+        labels=CLASS_LABELS,
+        target_names=CLASS_NAMES,
+        zero_division=0
+    ))
 
     return {
         "model": model_name,
@@ -70,20 +94,22 @@ def evaluate_model(
         "precision": float(precision_score(y_test, preds, average="weighted", zero_division=0)),
         "recall": float(recall_score(y_test, preds, average="weighted", zero_division=0)),
         "f1_score": float(f1_score(y_test, preds, average="weighted", zero_division=0)),
+        "attack_precision": float(report["Attack Traffic"]["precision"]),
+        "attack_recall": float(report["Attack Traffic"]["recall"]),
+        "attack_f1_score": float(report["Attack Traffic"]["f1-score"]),
 
         "training_samples": training_samples,
         "testing_samples": testing_samples,
         "top_features": top_features,
+        "class_order": list(CLASS_NAMES),
 
         "confusion_matrix": {
+            "labels": list(CLASS_NAMES),
+            "matrix": cm.tolist(),
             "true_positive": int(tp),
             "true_negative": int(tn),
             "false_positive": int(fp),
             "false_negative": int(fn)
         },
-        "classification_report": classification_report(
-            y_test,
-            preds,
-            output_dict=True
-        )
+        "classification_report": report
     }

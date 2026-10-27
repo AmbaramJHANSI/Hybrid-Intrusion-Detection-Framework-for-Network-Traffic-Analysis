@@ -1,3 +1,0 @@
-"""
-Signature-based IDS package
-"""

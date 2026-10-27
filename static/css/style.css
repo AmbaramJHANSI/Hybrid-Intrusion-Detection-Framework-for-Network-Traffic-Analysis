@@ -90,23 +90,6 @@ section{padding:20px 0}
   color:var(--accent);
 }
 
-.dashboard-card,
-.dashboard-card h3,
-.dashboard-card p,
-.dashboard-card td,
-.dashboard-card th,
-.dashboard-card .list-group-item,
-.dashboard-card .table thead th,
-.dashboard-card .table tbody td,
-.dashboard-card .pipeline li {
-  color: var(--text) !important;
-}
-
-.dashboard-card .table thead th,
-.dashboard-card .table tbody td {
-  color: #ffffff !important;
-}
-
 .kpi-card{
   text-align:center;
 }
@@ -189,27 +172,6 @@ pre{
   white-space:pre-wrap;
 }
 
-#apiResponse{
-  background:rgba(14,165,233,0.12);
-  color:#ffffff;
-  border:1px solid rgba(14,165,233,0.35);
-  border-radius:16px;
-  padding:20px;
-  overflow-x:auto;
-  white-space:pre-wrap;
-  word-break:break-word;
-}
-
-.risk-badge{
-  display:inline-block;
-  padding:.55rem 1rem;
-  border-radius:999px;
-  font-size:1.2rem;
-  letter-spacing:.4px;
-  font-weight:700;
-  color:#ffffff;
-}
-
 footer{
   border-top:1px solid var(--border);
   color:var(--muted);
@@ -284,4 +246,61 @@ margin-bottom:8px;
 .kpi-card h2{
 font-size:2rem;
 }
+}
+
+
+/* Isolation Forest dashboard additions */
+.anomaly-metric {
+  display:flex; flex-direction:column; gap:.35rem; height:100%; padding:1.1rem 1.25rem;
+  border:1px solid var(--border); border-radius:14px; background:rgba(2,6,23,.45);
+}
+.anomaly-metric span { color:var(--muted); font-size:.9rem; }
+.anomaly-metric strong { color:var(--accent); font-size:2rem; line-height:1.25; }
+.anomaly-table-wrap { max-height:390px; overflow:auto; }
+#anomalyTable thead { position:sticky; top:0; z-index:1; background:#0f172a; }
+.text-secondary { color:var(--muted)!important; }
+
+/* === High-contrast dashboard readability patch === */
+:root { --text:#eaf1fb; --muted:#b8c5d9; --accent:#38bdf8; }
+html { color-scheme: dark; }
+body, p, li, label, small, span, td, th, .table, .table td, .table th,
+.table thead th, .list-group-item, .dashboard-card { color:#eaf1fb; }
+.dashboard-card { background:#0f172a; }
+.dashboard-card h3, .dashboard-card h4 { color:#7dd3fc !important; }
+.table, .table > :not(caption) > * > * {
+  color:#eaf1fb !important;
+  background-color:transparent !important;
+  border-color:rgba(148,163,184,.22) !important;
+}
+.table thead th { color:#7dd3fc !important; font-weight:600; }
+.table tbody td, .table tbody th { color:#e2eaf6 !important; }
+.table-hover tbody tr:hover > * { color:#fff !important; background-color:rgba(56,189,248,.08) !important; }
+#classificationTable td, #classificationTable th,
+#confusionMatrix td, #confusionMatrix th,
+#anomalyTable td, #anomalyTable th { color:#e2eaf6 !important; }
+.text-muted, .text-secondary { color:#b8c5d9 !important; }
+.text-dark { color:#07111f !important; }
+.badge { font-weight:600; }
+canvas { max-width:100%; }
+
+
+/* Isolation Forest ground-truth evaluation section */
+#anomaly-evaluation .anomaly-metric {
+  background: linear-gradient(145deg, rgba(15, 23, 42, .98), rgba(8, 20, 38, .96));
+}
+#anomaly-evaluation .anomaly-metric strong {
+  font-variant-numeric: tabular-nums;
+}
+#anomaly-evaluation h4 {
+  color: #7dd3fc;
+}
+#anomaly-evaluation .table {
+  border-color: rgba(148, 163, 184, .25);
+}
+#anomaly-evaluation .table thead th {
+  color: #7dd3fc !important;
+}
+#anomaly-evaluation .table td,
+#anomaly-evaluation .table th {
+  padding: .85rem .65rem;
 }

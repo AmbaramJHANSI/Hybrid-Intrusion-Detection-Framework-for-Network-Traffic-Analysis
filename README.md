@@ -1,15 +1,14 @@
-# A Dual-Approach Intrusion Detection Model: Signature and Heuristic-Based Anomaly Detection in Network Traffic
+# Dataset-Based Hybrid Intrusion Detection Prototype
 
 ## Project Overview
 
-This project implements a hybrid intrusion detection system (IDS) that combines two complementary detection approaches:
+This project is a dataset-based intrusion detection prototype that analyzes NSL-KDD records through a Flask API. It does not perform live packet capture or live network monitoring. It reports three separate detection results:
 
-1. **Signature-Based Detection**: Rule-based detection using known attack patterns and signatures
-2. **Heuristic-Based Anomaly Detection**: Machine learning-based detection using statistical anomaly detection
+1. **Signature IDS**: detections produced by the implemented rules.
+2. **Random Forest**: supervised classification of records as normal or attack using labeled training data.
+3. **Isolation Forest**: unsupervised identification of unusual records. A flagged record is not, by itself, a confirmed attack.
 
-The dual approach leverages the strengths of both methods:
-- Signature detection provides high precision for known attacks
-- Anomaly detection captures unknown/zero-day attacks and subtle deviations from normal behavior
+These outputs are evaluated and presented independently; signature detections and anomaly flags are not combined into a single attack count.
 
 ## Project Structure
 
